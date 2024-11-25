@@ -1,57 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chỉnh sửa công việc</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            font-weight: bold;
-        }
-        input, textarea {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            box-sizing: border-box;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .btn-secondary {
-            background-color: #6c757d;
-        }
-        a {
-            text-decoration: none;
-            color: white;
-        }
-    </style>
-</head>
-<body>
-    <h2>Chỉnh sửa công việc</h2>
-    <form action="{{ route('tasks.update', $task->id) }}" method="POST">
-        @csrf
-        @method('PUT')
-        <div class="form-group">
-            <label for="title">Tiêu đề:</label>
-            <input type="text" id="title" name="title" value="{{ $task->title }}" required>
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Edit Task</div>
+
+                <div class="card-body">
+                    <form action="{{ route('tasks.update', $task->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+
+                        <div class="form-group">
+                            <label for="title">Title</label>
+                            <input type="text" 
+                                   class="form-control @error('title') is-invalid @enderror" 
+                                   id="title" 
+                                   name="title"
+                                   value="{{ old('title', $task->title) }}" 
+                                   required>
+                            @error('title')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="description">Description</label>
+                            <textarea class="form-control @error('description') is-invalid @enderror" 
+                                      id="description" 
+                                      name="description" 
+                                      rows="3">{{ old('description', $task->description) }}</textarea>
+                            @error('description')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-primary">Update Task</button>
+                            <a href="{{ route('tasks.index') }}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="description">Mô tả:</label>
-            <textarea id="description" name="description" required>{{ $task->description }}</textarea>
-        </div>
-        <button type="submit">Cập nhật</button>
-        <a href="{{ route('tasks.index') }}" class="btn-secondary" style="padding: 10px 20px;">Hủy</a>
-    </form>
-</body>
-</html>
+    </div>
+</div>
+@endsection
