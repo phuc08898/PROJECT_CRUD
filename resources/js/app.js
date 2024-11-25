@@ -5,6 +5,7 @@ import CreateTodo from './Component/CreateTodo';
 import EditTodo from './Component/EditTodo';
 import './bootstrap';
 import '../css/plate.css';
+import ChartComponent from './Component/ChartComponent';
 
 const App = () => {
     return (
@@ -12,6 +13,7 @@ const App = () => {
             <Routes>
                 <Route path="/tasks/create" element={<CreateTodo />} />
                 <Route path="/tasks/edit/:id" element={<EditTodo />} />
+                <Route path="/chart" element={<ChartComponent />} />
             </Routes>
         </Router>
     );

@@ -1,29 +1,23 @@
 <?php
-  
+
+
 namespace App\Http\Controllers;
-    
+
+
 use Illuminate\Http\Request;
-use Illuminate\View\View;
-use App\Models\User;
-use DB;
-    
+
+
 class ChartJSController extends Controller
 {
-    /**
-     * Write code on Method
-     *
-     * @return View
-     */
-    public function index(): View
+    public function index()
     {
-        $users = User::select(DB::raw("COUNT(*) as count"), DB::raw("MONTHNAME(created_at) as month_name"))
-                    ->whereYear('created_at', date('Y'))
-                    ->groupBy(DB::raw("Month(created_at)"))
-                    ->pluck('count', 'month_name');
- 
-        $labels = $users->keys();
-        $data = $users->values();
-              
+        // Sample data for the chart
+        $labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+        $data = [0, 10, 5, 2, 20, 30, 45];
+
+
+        // Pass data to the view
         return view('chart', compact('labels', 'data'));
     }
 }
+

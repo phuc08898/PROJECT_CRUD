@@ -16,6 +16,7 @@ import {
 import { createBasicElementsPlugin } from '@udecode/plate-basic-elements';
 import { createBasicMarksPlugin } from '@udecode/plate-basic-marks';
 
+
 const plugins = createPlugins([
     createParagraphPlugin(),
     createBasicElementsPlugin(),
@@ -26,6 +27,7 @@ const plugins = createPlugins([
     createHeadingPlugin(),
     createToolbarPlugin(),
 ]);
+
 
 const EditTodo = () => {
     const { id } = useParams();
@@ -38,16 +40,18 @@ const EditTodo = () => {
     ]);
     const [loading, setLoading] = useState(true);
 
+
     const editor = createPlateEditor({
         plugins,
     });
+
 
     useEffect(() => {
         fetch(`/api/tasks/${id}`)
             .then(response => response.json())
             .then(data => {
                 setTitle(data.title);
-                // Convert HTML to Plate.js format
+                // Chuyển đổi HTML sang định dạng Plate.js
                 setDescription([{
                     type: 'p',
                     children: [{ text: data.description || '' }],
@@ -55,15 +59,17 @@ const EditTodo = () => {
                 setLoading(false);
             })
             .catch(error => {
-                console.error('Error fetching task:', error);
+                console.error('Lỗi khi lấy công việc:', error);
                 setLoading(false);
             });
     }, [id]);
 
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Convert Plate.js value to HTML before sending
+
+        // Chuyển đổi giá trị Plate.js sang HTML trước khi gửi
         const descriptionHtml = description.map(node => {
             if (node.type === 'p') {
                 return `<p>${node.children.map(child => child.text).join('')}</p>`;
@@ -71,51 +77,54 @@ const EditTodo = () => {
             return '';
         }).join('');
 
+
         fetch(`/api/tasks/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
-            body: JSON.stringify({ 
-                title, 
-                description: descriptionHtml 
+            body: JSON.stringify({
+                title,
+                description: descriptionHtml
             })
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Task updated:', data);
+            console.log('Công việc đã được cập nhật:', data);
             window.location.href = '/tasks';
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Lỗi:', error);
         });
     };
 
+
     if (loading) {
-        return <div className="container mt-5">Loading...</div>;
+        return <div className="container mt-5">Đang tải...</div>;
     }
+
 
     return (
         <div className="container mt-5">
             <div className="card">
                 <div className="card-header">
-                    <h2>Edit Task</h2>
+                    <h2>Chỉnh sửa Công việc</h2>
                 </div>
                 <div className="card-body">
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3">
-                            <label className="form-label">Title:</label>
-                            <input 
-                                type="text" 
+                            <label className="form-label">Tiêu đề:</label>
+                            <input
+                                type="text"
                                 className="form-control"
-                                value={title} 
+                                value={title}
                                 onChange={(e) => setTitle(e.target.value)}
-                                required 
+                                required
                             />
                         </div>
                         <div className="mb-3">
-                            <label className="form-label">Description:</label>
+                            <label className="form-label">Mô tả:</label>
                             <PlateProvider plugins={plugins}>
                                 <Plate
                                     editableProps={{
@@ -133,26 +142,26 @@ const EditTodo = () => {
                                             e.preventDefault();
                                             editor.toggleMark('bold');
                                         }}>
-                                            Bold
+                                            Đậm
                                         </button>
                                         <button type="button" className="btn btn-sm btn-outline-secondary mx-1" onMouseDown={(e) => {
                                             e.preventDefault();
                                             editor.toggleMark('italic');
                                         }}>
-                                            Italic
+                                            Nghiêng
                                         </button>
                                         <button type="button" className="btn btn-sm btn-outline-secondary" onMouseDown={(e) => {
                                             e.preventDefault();
                                             editor.toggleMark('underline');
                                         }}>
-                                            Underline
+                                            Gạch chân
                                         </button>
                                     </div>
                                 </Plate>
                             </PlateProvider>
                         </div>
-                        <button type="submit" className="btn btn-primary">Update Task</button>
-                        <a href="/tasks" className="btn btn-secondary ms-2">Cancel</a>
+                        <button type="submit" className="btn btn-primary">Cập nhật Công việc</button>
+                        <a href="/tasks" className="btn btn-secondary ms-2">Hủy bỏ</a>
                     </form>
                 </div>
             </div>
@@ -160,4 +169,8 @@ const EditTodo = () => {
     );
 };
 
+
 export default EditTodo;
+
+
+

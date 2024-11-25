@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+
 @section('content')
 <div class="container">
     <div class="row">
@@ -11,11 +12,13 @@
                 </a>
             </div>
 
+
             @if(session('success'))
                 <div class="alert alert-success">
                     {{ session('success') }}
                 </div>
             @endif
+
 
             <div class="card">
                 <div class="card-body">
@@ -43,22 +46,22 @@
                                         </td>
                                         <td>
                                             <div class="btn-group">
-                                                <a href="{{ route('tasks.edit', $task->id) }}" 
+                                                <a href="{{ route('tasks.edit', $task->id) }}"
                                                    class="btn btn-info btn-sm text-white">
                                                     <i class="bi bi-pencil"></i> Sửa
                                                 </a>
-                                                <form action="{{ route('tasks.destroy', $task->id) }}" 
-                                                      method="POST" 
+                                                <form action="{{ route('tasks.destroy', $task->id) }}"
+                                                      method="POST"
                                                       class="d-inline">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" 
+                                                    <button type="submit"
                                                             class="btn btn-danger btn-sm ms-1"
                                                             onclick="return confirm('Bạn có chắc chắn muốn xóa công việc này?')">
                                                         <i class="bi bi-trash"></i> Xóa
                                                     </button>
                                                 </form>
-                                                <a href="{{ route('tasks.show', $task->id) }}" 
+                                                <a href="{{ route('tasks.show', $task->id) }}"
                                                    class="btn btn-primary btn-sm ms-1">
                                                     <i class="bi bi-eye"></i> Chi tiết
                                                 </a>
@@ -74,6 +77,7 @@
                         </table>
                     </div>
 
+
                     @if(method_exists($tasks, 'links'))
                         <div class="d-flex justify-content-end mt-3">
                             {{ $tasks->links() }}
@@ -85,3 +89,8 @@
     </div>
 </div>
 @endsection
+
+
+
+
+
